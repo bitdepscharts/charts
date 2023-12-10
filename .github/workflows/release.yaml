@@ -30,3 +30,4 @@ jobs:
             oci_username: dennybaa
             oci_password: ${{ secrets.GITHUB_TOKEN }}
             github_token: ${{ secrets.GITHUB_TOKEN }}
+            charts_dir: bitdeps/
