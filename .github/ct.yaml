@@ -1,0 +1,11 @@
+remote: origin
+target-branch: main
+chart-dirs:
+  - bitdeps/
+chart-repos: []
+excluded-charts: []
+debug: true
+check-version-increment: true
+validate-chart-schema: true
+validate-maintainers: true
+validate-yaml: true
