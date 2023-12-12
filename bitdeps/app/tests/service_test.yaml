@@ -2,18 +2,16 @@ suite: service
 templates:
   - service.yaml
 tests:
-  -
-    it: service labels
+  - it: service labels
     values:
       - ./values/common.yaml
       - ./values/service-ports.yaml
     asserts:
-     - isSubset:
-        path: metadata.labels
-        content:
-          common: label
-  -
-    it: service ports
+      - isSubset:
+          path: metadata.labels
+          content:
+            common: label
+  - it: service ports
     values:
       - ./values/common.yaml
       - ./values/service-ports.yaml
@@ -35,8 +33,7 @@ tests:
           path: spec.ports
           content:
             name: zdisabled
-  -
-    it: check extended port configuration
+  - it: check extended port configuration
     values:
       - ./values/service-ports-ext.yaml
     asserts:
@@ -46,6 +43,5 @@ tests:
       - equal:
           path: spec.ports[0].targetPort
           value: foo
-      - equal:
+      - isNull:
           path: spec.ports[0].nodePort
-          value: null

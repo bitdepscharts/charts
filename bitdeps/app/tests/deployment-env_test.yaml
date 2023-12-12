@@ -2,8 +2,7 @@ suite: deployment
 templates:
   - deployment.yaml
 tests:
-  -
-    it: default container .env and .extraEnvVars
+  - it: default container .env and .extraEnvVars
     values:
       - ./values/app.yaml
     asserts:
@@ -17,8 +16,7 @@ tests:
           value:
             name: ADDED_AFTER
             value: ".env"
-  -
-    it: additional container .env and .extraEnvVars
+  - it: additional container .env and .extraEnvVars
     values:
       - ./values/app.yaml
     asserts:
@@ -42,8 +40,7 @@ tests:
           value:
             name: ADDED_AFTER
             value: ".env"
-  -
-    it: default and additional containers .env and .extraEnvVars is unset
+  - it: default and additional containers .env and .extraEnvVars is unset
     values:
       - ./values/app.yaml
     set:
@@ -54,12 +51,11 @@ tests:
           env: null
           extraEnvVars: null
     asserts:
-      - isNull:
+      - isEmpty:
           path: spec.template.spec.containers[0].env
-      - isNull:
+      - isEmpty:
           path: spec.template.spec.containers[1].env
-  -
-    it: initContainer .env and .extraEnvVars
+  - it: initContainer .env and .extraEnvVars
     values:
       - ./values/app.yaml
     asserts:
@@ -83,8 +79,7 @@ tests:
           value:
             name: ADDED_AFTER
             value: ".env"
-  -
-    it: default and additional containers .envFrom
+  - it: default and additional containers .envFrom
     values:
       - ./values/app.yaml
     asserts:
@@ -109,8 +104,7 @@ tests:
           content:
             secretRef:
               name: bar
-  -
-    it: initContainers .envFrom
+  - it: initContainers .envFrom
     values:
       - ./values/app.yaml
     asserts:
