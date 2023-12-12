@@ -1,20 +1,31 @@
 name: Lint and Test Charts
 on: pull_request
 
+env:
+  charts_dir: bitdeps/
+
 jobs:
-  # unit-test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     -
-  #       uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-  #     -
-  #       name: Run quintush/helm-unittest
-  #       uses: docker://quintush/helm-unittest:3.10.1-0.2.10
-  #       with:
-  #         entrypoint: ./.github/scripts/unit-test.sh
-  #         args: dysnix/
+  unit-test:
+    runs-on: ubuntu-latest
+    container:
+      image: docker://quintush/helm-unittest:3.11.2-0.3.0
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+          fetch-depth: 0
+      - 
+        name: Install system packages
+        run: .github/scripts/runt.sh --os-install bash git
+      - 
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      -
+        name: Run Unit Test
+        shell: bash
+        run: . .github/scripts/helpers.sh; run_unittest
 
   lint-test:
     runs-on: ubuntu-latest
@@ -29,10 +40,6 @@ jobs:
         uses: azure/setup-helm@v3
         with:
           version: v3.13.2
-      # -
-      #   uses: actions/setup-python@v2
-      #   with:
-      #     python-version: 3.7
       -
         uses: helm/chart-testing-action@v2.6.0
       -
@@ -42,30 +49,14 @@ jobs:
         name: Lint chart-testing
         run: ct lint
       -
-        name: Changes chart-testing
+        name: Exclude library charts
         id: charts
-        # 1. get library chart list - /tmp/_library_charts
-        # 2. get list of the charts changed (striping ct control output) - /tmp/_changed_charts
-        # 3. create list of charts to test (excluding library charts) - $test_list
-        # 4. exclude library charts list, a comma separated list of library charts - $exclude_list
-        run: |
-          exit 0
-          ls -1 dysnix/*/Chart.yaml | xargs grep -E "type:\s+library" | sed 's/\/Chart.yaml.*//' > /tmp/_library_charts || /bin/true
-          ct list-changed | sed '/^>>>.*/d' > /tmp/_changed_charts
-          test_list=$(grep -v -x -f /tmp/_library_charts /tmp/_changed_charts 2>/dev/null || /bin/true)
-          exclude_list=$(cat /tmp/_library_charts | sed '/^ *$/d;N;s/\n/,/' | sed 's/dysnix\///g')
-
-          if [[ -n "$test_list" ]]; then
-            echo "::set-output name=testing::true"
-          fi
-          if [[ -n "$exclude_list" ]]; then
-            echo "::set-output name=excluded-charts::--excluded-charts ${exclude_list}"
-          fi
+        run: . .github/scripts/helpers.sh; set_testing_output
       -
         name: Create Kubernetes Cluster (kind)
         uses: helm/kind-action@v1.5.0
         if: steps.charts.outputs.testing == 'true'
       -
-        name: Install Charts chart-testing
+        name: Test Charts
         run: ct install ${{ steps.charts.outputs.excluded-charts }}
         if: steps.charts.outputs.testing == 'true'

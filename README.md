@@ -18,10 +18,10 @@ cat <<EHD > .git/hooks/pre-push
 set -e
 repo_path="$(git rev-parse --show-toplevel)"
 
-${repo_path}/githooks/pre-push/chart-version
-${repo_path}/githooks/pre-push/helm-lint
-${repo_path}/githooks/pre-push/yaml-lint
-${repo_path}/githooks/pre-push/kubeval
+\${repo_path}/githooks/pre-push/chart-version
+\${repo_path}/githooks/pre-push/helm-lint
+\${repo_path}/githooks/pre-push/yaml-lint
+\${repo_path}/githooks/pre-push/kubeval
 EHD
 
 chmod +x .git/hooks/pre-push

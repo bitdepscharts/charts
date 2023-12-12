@@ -12,7 +12,7 @@ failed=0
 
 for chart_name in $( cut -d'/' -f1,2 <<< "$files_to_push" | uniq ); do
     # Avoid checking chart version when modified dirs are not charts
-    if [[ $chart_name = dysnix/* ]]; then
+    if [[ $chart_name = bitdeps/* ]]; then
         printf '\033[01;33mValidating %s chart version:\n\033[0m' "$chart_name"
         if ! run_version_change_chart "$chart_name"; then
             failed=1
