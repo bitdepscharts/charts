@@ -1,0 +1,54 @@
+suite: deployment
+templates:
+  - deployment.yaml
+tests:
+  -
+    it: persistence enabled
+    values:
+      - ./values/persistence.yaml
+      - ./values/app.yaml
+    asserts:
+      -
+        contains:
+          path: spec.template.spec.volumes
+          any: true
+          content:
+            name: data
+            persistentVolumeClaim:
+              claimName: RELEASE-NAME-app
+      -
+        contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          any: true
+          content:
+            name: data
+  -
+    it: persistence enabled with .persistence.existingClaim is set
+    values:
+      - ./values/persistence.yaml
+      - ./values/app.yaml
+    set:
+      persistence.existingClaim: existing-claim
+    asserts:
+      -
+        contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          any: true
+          content:
+            name: data
+  -
+    it: persistence enabled and .persistence.emptyDir is set
+    values:
+      - ./values/persistence.yaml
+      - ./values/app.yaml
+    set:
+      persistence.emptyDir: true
+    asserts:
+      -
+        template: deployment.yaml
+        contains:
+          path: spec.template.spec.volumes
+          any: true
+          content:
+            name: data
+            emptyDir: {}

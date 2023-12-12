@@ -1,0 +1,41 @@
+{{/* vim: set filetype=helm: */}}
+{{- define "app.resources.configmap" }}
+{{- if .Values.configMaps }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "common.names.fullname" . }}-{{ ._include.name }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  annotations:
+    {{- with .Values.commonAnnotations }}
+      {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- with .Values.annotations }}
+      {{- include "common.tplvalues.render" (dict "value" . "context" $) | nindent 4 }}
+    {{- end }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- if ._include.data }}
+data:
+  {{- $dict := dict -}}
+  {{- range $key, $value := ._include.data | default dict -}}
+    {{/* Render value first, since it's possible to pass a complex type (i.e map) */}}
+    {{- $_ := set $dict $key (include "common.tplvalues.render" (dict "value" $value "context" $)) -}}
+  {{- end -}}
+  {{- $dict | toYaml | nindent 2 }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{- define "app.resources.configmaps" -}}
+  {{- range $name, $data := .Values.configMaps | default dict }}
+    {{- include "app.resources.include" (dict "_include" (dict "resource" "configmap" "name" $name "data" $data) | mergeOverwrite $) }}
+  {{- end }}
+{{- end -}}
+
+{{/* Includes this resource */}}
+{{- include "app.template" . -}}
