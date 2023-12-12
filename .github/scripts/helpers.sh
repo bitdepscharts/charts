@@ -32,7 +32,7 @@ lookup_latest_tag() {
 filter_charts() {
   local charts=()
   while read -r path; do
-    if [[ -d "$path" && -f "${path}/Chart.yaml" ]]; then
+    if [[ -f "${path}/Chart.yaml" ]]; then
       charts+=("$path")
     fi
   done
