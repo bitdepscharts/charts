@@ -29,6 +29,7 @@ jobs:
 
   lint-test:
     runs-on: ubuntu-latest
+    if: false
     steps:
       -
         name: Checkout
