@@ -16,7 +16,6 @@ Usage
 {{- define "app.resources.include" -}}
   {{/* Don't require top on nested runs, use _include.top */}}
   {{- if not (all ._include.resource ._include.top) -}}
-    {{- keys ._include | toYaml | fail -}}
     {{- "_include.{resource,top} must be provided" | fail -}}
   {{- end -}}
 
@@ -90,7 +89,7 @@ Usage:
     {{- $path := get $componentPaths $component | toString -}}
     {{- if ne $path "false" -}}
       {{- $context := dict "_include" ($include | merge (dict "component" $component)) -}}
-      {{- include "app.resources.include" $context -}}
+        {{- include "app.resources.include" $context -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

@@ -1,25 +1,26 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Kubernetes standard labels
+Kubernetes standard labels (extended)
+  {{ include "app.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) -}}
 */}}
-{{- define "common.labels.standard" -}}
-app.kubernetes.io/name: {{ include "common.names.name" . }}
-helm.sh/chart: {{ include "common.names.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if ._include.component }}
-app.kubernetes.io/component: {{ ._include.component }}
-{{- end }}
+{{- define "app.labels.standard" -}}
+  {{- $labels := include "common.labels.standard" . | fromYaml -}}
+  {{- if .context._include.component -}}
+    {{- $_ := set $labels "app.kubernetes.io/component" .context._include.component -}}
+  {{- end -}}
+  {{- $labels | toYaml -}}
 {{- end -}}
 
 {{/*
-Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
+Labels used on immutable fields such as deploy.spec.selector.matchLabels or svc.spec.selector
+  {{ include "app.labels.matchLabels" (dict "customLabels" .Values.podLabels "context" $) -}}
 */}}
-{{- define "common.labels.matchLabels" -}}
-app.kubernetes.io/name: {{ include "common.names.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if ._include.component }}
-app.kubernetes.io/component: {{ ._include.component }}
-{{- end }}
+
+{{- define "app.labels.matchLabels" -}}
+  {{- $labels := include "common.labels.matchLabels" . | fromYaml -}}
+  {{- if .context._include.component -}}
+    {{- $_ := set $labels "app.kubernetes.io/component" .context._include.component -}}
+  {{- end -}}
+  {{- $labels | toYaml -}}
 {{- end -}}

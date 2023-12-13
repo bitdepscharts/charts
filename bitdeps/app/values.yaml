@@ -350,6 +350,10 @@ args: []
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+## @param deploymentAnnotations Annotations for the component's deployment
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+deploymentAnnotations: {}
 ## @param podLabels Extra labels for pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##

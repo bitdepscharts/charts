@@ -1,11 +1,10 @@
 apiVersion: v2
 name: app
 description: Generic application Helm chart
-home: https://github.com/dysnix/charts/tree/main/dysnix/app
-icon: https://dysnix.com/images/logo.svg
-version: 0.100.0
+home: https://github.com/bitdepscharts/charts/tree/main/bitdeps/app
+version: 0.100.1
 sources:
-  - https://github.com/dysnix/charts
+  - https://github.com/bitdepscharts/charts
 keywords:
   - common
   - helper
@@ -15,13 +14,11 @@ keywords:
   - bitnami
   - dysnix
 maintainers:
-  - email: services@dysnix.com
-    name: Dysnix
   - email: dennybaa@gmail.com
-    name: dennybaa  # Denis Baryshev
+    name: dennybaa # Denis Baryshev
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 2.2.2
+    version: 2.13.3

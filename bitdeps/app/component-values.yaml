@@ -69,6 +69,7 @@ containerSecurityContext:
 command: []
 args: []
 hostAliases: []
+deploymentAnnotations: {}
 podLabels: {}
 podAnnotations: {}
 podAffinityPreset: ""

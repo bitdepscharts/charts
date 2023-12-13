@@ -307,7 +307,6 @@ containers:
 | `secrets`           | Creates application secrets (note the name is prefixed with the app name)                          | `{}`         |
 | `templateChecksums` | Specifies list of template files to add as an annotation checksum into the pod.                    | `[]`         |
 
-
 ### Global parameters
 
 | Name                      | Description                                     | Value |
@@ -315,7 +314,6 @@ containers:
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -332,7 +330,6 @@ containers:
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Main pod Parameters
 
@@ -391,6 +388,7 @@ containers:
 | `command`                                         | Override default container command (useful when using custom images)                                                                                              | `[]`            |
 | `args`                                            | Override default container args (useful when using custom images)                                                                                                 | `[]`            |
 | `hostAliases`                                     | pods host aliases                                                                                                                                                 | `[]`            |
+| `deploymentAnnotations`                           | Annotations for the component's deployment                                                                                                                        | `{}`            |
 | `podLabels`                                       | Extra labels for pods                                                                                                                                             | `{}`            |
 | `podAnnotations`                                  | Annotations for pods                                                                                                                                              | `{}`            |
 | `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                               | `""`            |
@@ -428,7 +426,6 @@ containers:
 | `sidecars`                                        | Add additional sidecar containers to the pod(s)                                                                                                                   | `[]`            |
 | `extraInitContainers`                             | Add additional init containers to the pod(s) (go after .initContainers)                                                                                           | `[]`            |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -463,7 +460,6 @@ containers:
 | `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                        | Description                                                                                             | Value               |
@@ -481,7 +477,6 @@ containers:
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                              | Value                   |
@@ -495,7 +490,6 @@ containers:
 | `volumePermissions.resources.limits`                   | The resources limits for the init container              | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container           | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser          | `0`                     |
-
 
 ### Other Parameters
 

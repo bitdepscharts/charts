@@ -46,7 +46,7 @@ Usage:
 
   {{- else if kindIs "string" .value -}}
 
-{{ tpl .value .context -}}
+{{ tpl .value (.context | merge dict) -}}
 
   {{- else -}}
 
