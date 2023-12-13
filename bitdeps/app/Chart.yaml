@@ -15,10 +15,8 @@ keywords:
   - dysnix
 maintainers:
   - email: dennybaa@gmail.com
-    name: dennybaa # Denis Baryshev
+    name: dennybaa
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
-    tags:
-      - bitnami-common
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 2.13.3
