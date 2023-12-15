@@ -2,7 +2,7 @@ apiVersion: v2
 name: app
 description: Generic application Helm chart
 home: https://github.com/bitdepscharts/charts/tree/main/bitdeps/app
-version: 0.100.1
+version: 1.0.0
 sources:
   - https://github.com/bitdepscharts/charts
 keywords:
