@@ -1,4 +1,4 @@
-[![Lint and Test Charts](https://github.com/bitdeps/charts/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/bitdeps/charts/actions/workflows/lint-test.yaml)
+[![Lint and Test Charts](https://github.com/bitdepscharts/charts/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/bitdepscharts/charts/actions/workflows/lint-test.yaml)
 
 # BitDeps Helm charts
 
