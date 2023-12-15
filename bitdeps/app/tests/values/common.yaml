@@ -1,0 +1,13 @@
+app:
+  name: app-name
+
+image:
+  registry: foo
+  repository: alpine
+  tag: bar
+
+commonLabels:
+  common: label
+
+podLabels:
+  pod: label

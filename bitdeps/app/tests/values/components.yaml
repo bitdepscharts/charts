@@ -1,0 +1,14 @@
+app:
+  name: multi
+  components:
+    default:
+      enabled: false
+    component:
+      enabled: true
+      path: mycomponent
+
+mycomponent:
+  serviceAccount:
+    create: false
+  image:
+    repository: image
