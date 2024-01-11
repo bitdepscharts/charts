@@ -1,4 +1,5 @@
-[![Lint and Test Charts](https://github.com/bitdepscharts/charts/actions/workflows/lint-test.yaml/badge.svg)](https://github.com/bitdepscharts/charts/actions/workflows/lint-test.yaml)
+<!-- markdownlint-disable-next-line -->
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/bitdeps)](https://artifacthub.io/packages/search?org=bitdeps) [![CD Pipeline](https://github.com/bitdepscharts/charts/actions/workflows/release.yaml/badge.svg)](https://github.com/bitdepscharts/charts/actions/workflows/release.yaml)
 
 # BitDeps Helm charts
 
