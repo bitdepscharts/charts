@@ -385,9 +385,9 @@ pdb:
   maxUnavailable: ""
 ## Autoscaling configuration
 ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-## @param autoscaling.enabled Enable autoscaling for %%MAIN_OBJECT_BLOCK%%
-## @param autoscaling.minReplicas Minimum number of %%MAIN_OBJECT_BLOCK%% replicas
-## @param autoscaling.maxReplicas Maximum number of %%MAIN_OBJECT_BLOCK%% replicas
+## @param autoscaling.enabled Enable autoscaling for component
+## @param autoscaling.minReplicas Minimum number of component replicas
+## @param autoscaling.maxReplicas Maximum number of component replicas
 ## @param autoscaling.targetCPU Target CPU utilization percentage
 ## @param autoscaling.targetMemory Target Memory utilization percentage
 ## @param autoscaling.behavior Configure separate scale-up and scale-down behaviors

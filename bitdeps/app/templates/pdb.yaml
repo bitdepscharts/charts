@@ -1,0 +1,28 @@
+{{/* vim: set filetype=helm: */}}
+{{- define "app.resources.pdb" -}}
+{{- $replicaCount := int .Values.replicaCount }}
+{{- if and .Values.pdb.create (or (gt $replicaCount 1) .Values.autoscaling.enabled) }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "app.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.pdb.minAvailable }}
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- end  }}
+  {{- if .Values.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- end  }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" (list .Values.podLabels .Values.commonLabels) "context" .) }}
+  selector:
+    matchLabels: {{- include "app.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+{{- end }}
+{{- end -}}
+
+{{/* Includes this resource */}}
+{{- include "app.template" . -}}
