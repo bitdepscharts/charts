@@ -27,7 +27,6 @@
 
 {{/* Build resulting rendered list */}}
 {{- range $resource :=  $input -}}
-  {{- if empty $resource.name -}}{{- fail "resource/template .name must be provided!" -}}{{- end -}}
   {{- $condition := $resource.condition | default "" -}}
   {{- $metadata := include "raw.metadata" (dict "name" $resource.name "context" $) | fromYaml -}}
 
