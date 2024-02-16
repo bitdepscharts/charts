@@ -2,7 +2,8 @@ remote: origin
 target-branch: main
 chart-dirs:
   - bitdeps/
-chart-repos: []
+chart-repos:
+  - bitnami=https://charts.bitnami.com/bitnami
 excluded-charts: []
 debug: true
 check-version-increment: true
