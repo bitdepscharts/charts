@@ -1,0 +1,21 @@
+apiVersion: v2
+name: raw
+description: Raw resource/templates application Helm chart
+home: https://github.com/bitdepscharts/charts/tree/main/bitdeps/raw
+type: application
+version: 0.1.0
+sources:
+  - https://github.com/bitdepscharts/charts
+keywords:
+  - common
+  - helper
+  - template
+  - function
+  - bitnami
+maintainers:
+  - email: dennybaa@gmail.com
+    name: dennybaa
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    version: 2.16.0
