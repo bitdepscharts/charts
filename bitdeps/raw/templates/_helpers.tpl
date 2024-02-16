@@ -7,9 +7,9 @@ Defines the default resource metadata
 {{- $name := .name -}}
 {{- with .context -}}
 metadata:
-  {{- if $name -}}
+  {{- if $name }}
   name: {{ template "common.names.fullname" .context }}-{{ $name }}
-  {{- end -}}
+  {{- end }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" . ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
