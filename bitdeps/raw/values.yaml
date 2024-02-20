@@ -27,6 +27,9 @@ commonAnnotations: {}
 
 ## @section Resources and features
 ##
+## @param enableFeatures Enables/disables features default (defaultFeatures).
+##
+enableFeatures: true
 ## @param defaultFeatures Defines available features, sets the default state (enabled/disabled)
 ## e.g:
 ## defaultFeatures:

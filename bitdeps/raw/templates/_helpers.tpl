@@ -28,7 +28,8 @@ true
     {{/* istio.enabled splits into _0: istio, _1: enabled */}}
     {{- $feature := .condition | split "." -}}
     {{- with .context -}}
-      {{- $default := get .Values.defaultFeatures $feature._0 | default false -}}
+      {{- $featureDefault := get .Values.defaultFeatures $feature._0 | default false -}}
+      {{- $default := ternary $featureDefault false .Values.enableFeatures -}}
       {{- $enabled := .Values | dig  $feature._0 $feature._1 $default -}}
 {{- ternary "true" "" $enabled -}}
     {{- end -}}
