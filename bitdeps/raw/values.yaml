@@ -25,41 +25,28 @@ commonLabels: {}
 commonAnnotations: {}
 
 
-## @section Conditional rendring parameters
+## @section Resources and features
 ##
-## @param features List specifying available features (with can by enabled or disabled)
+## @param defaultFeatures Defines available features, sets the default state (enabled/disabled)
 ## e.g:
-## features:
-##   - istio
-##   - kube-state-metrics
-features: []
-##
-## @param enable List to selectively enable features - enable mode (all features are disabled by default)
-## In the bellow example istio.enabled will be set to true, enablers is ignored:
-## e.g:
-## enable:
-##   - istio
-enable: []
-##
-## @param disable List to selectively disable features - disable mode (all feautures are on)
-##
-## e.g:
-## disable:
-##   - kube-state-metrics
-disable: []
-## @param resources List of resources to render (inner templates are not processed)
-##
-resources: []
-## @param templates List of templates (same as resources, but their inner content is rendered)
+## defaultFeatures:
+##   cadvisor: true
+##   kube-state-metrics: true
+##   kubernetes-nodes: true
+defaultFeatures: {}
+## @param rawList List of resources to render (value is rendered using tpl if type=template)
 ##
 ## e.g:
 ## myVariable: hello
-## templates:
-##   - name: foo
-##     value: |
-##       apiVersion: v1
-##       kind: ConfigMap
-##       data:
-##         foo: |-
-##           {{ .Values.myVariable }}
-templates: []
+## resourses:
+## - condition: hello.enabled
+##   name: somename
+##   type: template
+##   value:
+##     apiVersion: v1
+##     kind: ConfigMap
+##     data:
+##       foo: |-
+##         {{ .Values.myVariable }}
+##
+rawList: []

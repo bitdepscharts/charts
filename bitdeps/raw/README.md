@@ -33,82 +33,103 @@ helm install example oci://ghcr.io/bitdepscharts/raw --values config.yaml
 | `commonLabels`      | Labels to add to all deployed objects                                             | `{}`  |
 | `commonAnnotations` | Annotations to add to all deployed objects                                        | `{}`  |
 
-### Conditional rendring parameters
+### Resources and features
 
-| Name        | Description                                                                              | Value |
-| ----------- | ---------------------------------------------------------------------------------------- | ----- |
-| `features`  | List specifying available features (with can by enabled or disabled)                     | `[]`  |
-| `enable`    | List to selectively enable features - enable mode (all features are disabled by default) | `[]`  |
-| `disable`   | List to selectively disable features - disable mode (all feautures are on)               | `[]`  |
-| `resources` | List of resources to render (inner templates are not processed)                          | `[]`  |
-| `templates` | List of templates (same as resources, but their inner content is rendered)               | `[]`  |
+| Name              | Description                                                                | Value |
+| ----------------- | -------------------------------------------------------------------------- | ----- |
+| `defaultFeatures` | Defines available features, sets the default state (enabled/disabled)      | `{}`  |
+| `rawList`         | List of resources to render (value is rendered using tpl if type=template) | `[]`  |
 
 ## Configuration Examples
 
-### Resources and Templates
+### Handling Resources/Templates
 
-Both resources and templates are responsible for rendering the provided data into manifests. While metadata is automatically handled, it's entirely possible to override it within the `value` block.
+The `rawList` list expects definitions of resources to render. Depending on the `type`, the raw chart will process the `value` differently. If `type: template`, the `value` will be subject to `tpl` rendering. If `type: resource` or not specified, no rendered as is.
 
 ```yaml
 myVariable: hello
-
-resources:
-  - name: bar
-    value:
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: '{{ include "common.names.fullname" . }}-override'
-      data:
-        bar: |-
-          {{ .Values.myVariable }} // This is not rendered for a resource.
-
-templates:
-  - name: foo
-    value: |
-      apiVersion: v1
-      kind: ConfigMap
-      data:
-        foo: |-
-          {{ .Values.myVariable }}
+rawList:
+- name: config
+  value:
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: "overrides-automatic-fullname"
+    data:
+      bar: |-
+        {{ .Values.myVariable }} // This is not rendered 'type: template' is not set.
 ```
 
-### Features: enable/disable mode
+### Features
 
-You may use `features`, `enable`, `disable` and `condition` to achieve conditional rendering follow on with the examples. If a resource or template has no condition specified a manifest will be unconditionally rendered!
-
-#### Enable mode
-
-Enable mode is turned on when `enable` list is provided, it disables all provided features except those specificly set in the `enable` list. In fact enable doesn't require features enumeration at all.
+The chart supports conditional rendering for a convenient way to enable/disable features. First, you may want to define defaults for the available features:
 
 ```yaml
-features:
-  - istio
-  - kube-state-metrics
-  - foo
-
-enable:
-  - foo
-
-resources:
-  - name: foo
-    condition: foo.enabled
-    value:
-      apiVersion: v1
-      kind: ConfigMap
-      data:
-        foo: bar
+defaultFeatures:
+  cadvisor: true
+  kube-state-metrics: true
+  kubernetes-nodes: true
+  port-metrics: true
+  istio: true
 ```
 
-#### Disable mode
+When a condition such as `istio.enabled` is met, it matches this default state. To achieve conditional rendering, you can individually set the condition value into the desired state, as shown below:
 
-This mode is enabled when `disable` list is provided. It enables all features by default and disables only those which are specifically given by the `disable` list.
+```yaml
+defaultFeatures:
+  hello: true
 
-Note: if both `enable` and `disable` is provided, the chart switches operation into **enable mode**.
+hello:
+  enabled: false
 
-### Key Points
+rawList:
+- type: template
+  name: config
+  condition: hello.enabled
+  value:
+    ...
+```
+
+## Advanced usage
+
+This chart supports operation as a depndency in such case it provides `raw.render.fromfiles` function, which you invoke as follows:
+
+```yaml
+{{- include "raw.render.fromfiles" (dict "resources" "scarpers/**.yaml" "values" .Values.scrapers "context" $) -}}
+```
+
+`resource` provides a file-glob to lookup files in your root chart, `values` is a path to features and their settings. These files will contain YAML defintions of the same structure as we have covered above:
+
+```yaml
+# scarpers/istio.yaml
+---
+condition: istio.enabled
+name: istio
+value:
+  apiVersion: operator.victoriametrics.com/v1beta1
+  kind: VMPodScrape
+  spec:
+    podMetricsEndpoints:
+      - port: http-envoy-prom
+        scheme: http
+        path: /stats/prometheus
+        targetPort: http-envoy-prom
+        interval: 20s
+        scrapeTimeout: 5s
+        honorLabels: true
+    namespaceSelector:
+      any: false
+      matchNames: [ "istio-system" ]
+    selector:
+      matchLabels:
+        chart: gateways
+```
+
+Note: that a single file may contain YAML-multipart document to facilate simultaneously multiple resources in one file.
+
+## Key Takeaways
 
 * Utilize `chartName` to migrate multiple wrapper charts with simplistic manifests. This allows you to switch to just a single **raw** chart and seamlessly replace existing wrapper charts deployments.
 * You have the flexibility to use either a map or a string for the `value` block. Note that any value within the `value` block **must be valid serializable YAML**. Ensure that items containing templates are properly escaped, as demonstrated in the example with `data.bar`, `data.foo`, and `metadata.name` (the latter in single quotes represents a valid YAML string).
-* The **metadata** block is rendered via *tpl* in both `resources` and `templates`. Explicitly provided metadata takes precedence over the convenient defaults provided by the chart.
+* Explicitly provided metadata takes precedence over the convenient defaults provided by the chart.
 * You may leverage state-of-the-art Bitnami Common template helpers :)

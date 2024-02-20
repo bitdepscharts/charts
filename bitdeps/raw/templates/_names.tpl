@@ -4,23 +4,20 @@
   Takes component into account.
 */}}
 
-{{/*
-Alias for the "common.names.name" template
-*/}}
-{{- define "app.name" -}}
-  {{- template "common.names.name" . -}}
+{{- define "raw.chart.name" -}}
+  {{- ternary .Chart.Name .Values.chartName .Chart.IsRoot -}}
 {{- end -}}
 
 {{/*
-Expand the name of the chart.
+Expand the name of the chart. Compatible with original common.names.name
 */}}
 {{- define "common.names.name" -}}
-  {{- default .Values.chartName .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
+  {{- default (include "raw.chart.name" .) .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "common.names.chart" -}}
-  {{- printf "%s-%s" .Values.chartName .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+  {{- printf "%s-%s" (include "raw.chart.name" .) .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
