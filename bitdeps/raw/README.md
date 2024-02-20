@@ -35,10 +35,11 @@ helm install example oci://ghcr.io/bitdepscharts/raw --values config.yaml
 
 ### Resources and features
 
-| Name              | Description                                                                | Value |
-| ----------------- | -------------------------------------------------------------------------- | ----- |
-| `defaultFeatures` | Defines available features, sets the default state (enabled/disabled)      | `{}`  |
-| `rawList`         | List of resources to render (value is rendered using tpl if type=template) | `[]`  |
+| Name              | Description                                                                | Value  |
+| ----------------- | -------------------------------------------------------------------------- | ------ |
+| `enableFeatures`  | Enables/disables features default (defaultFeatures).                       | `true` |
+| `defaultFeatures` | Defines available features, sets the default state (enabled/disabled)      | `{}`   |
+| `rawList`         | List of resources to render (value is rendered using tpl if type=template) | `[]`   |
 
 ## Configuration Examples
 
