@@ -4,18 +4,35 @@
 Defines the default resource metadata
 */}}
 {{- define "raw.metadata" -}}
-{{- $name := .name -}}
 {{- with .context -}}
-metadata:
-  {{- if $name }}
-  name: {{ template "common.names.fullname" .context }}-{{ $name }}
-  {{- end }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" . ) | nindent 4 }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
-  {{- end }}
+
+{{- if $.name }}
+name: {{ template "common.names.fullname" . }}-{{ $.name }}
+{{- end }}
+namespace: {{ include "common.names.namespace" . | quote }}
+labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" . ) | nindent 4 }}
+{{- if .Values.commonAnnotations }}
+annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" . ) | nindent 4 }}
+{{- end }}
+
 {{- end -}}
+{{- end -}}
+
+{{/*
+Defines the default resource metadata
+*/}}
+{{- define "raw.feature.enabled" -}}
+  {{- if not .condition }}
+true
+  {{- else -}}
+    {{/* istio.enabled splits into _0: istio, _1: enabled */}}
+    {{- $feature := .condition | split "." -}}
+    {{- with .context -}}
+      {{- $default := get .Values.defaultFeatures $feature._0 | default false -}}
+      {{- $enabled := .Values | dig  $feature._0 $feature._1 $default -}}
+{{- ternary "true" "" $enabled -}}
+    {{- end -}}
+  {{- end }}
 {{- end -}}
 
 {{/*
