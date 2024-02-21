@@ -40,14 +40,13 @@ features:
   ##   kubernetes-nodes: true
   ##
   default: {}
-## @param rawList List of resources to render (value is rendered using tpl if type=template)
+## @param rawList List of resources to render (value can be either map or string)
 ##
 ## e.g:
 ## myVariable: hello
 ## resourses:
 ## - condition: hello.enabled
 ##   name: somename
-##   type: template
 ##   value:
 ##     apiVersion: v1
 ##     kind: ConfigMap
