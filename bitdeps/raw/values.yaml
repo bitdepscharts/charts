@@ -27,16 +27,19 @@ commonAnnotations: {}
 
 ## @section Resources and features
 ##
-## @param enableFeatures Enables/disables features default (defaultFeatures).
+## @param features.enabled Specify whether to use the features.default state.
 ##
-enableFeatures: true
-## @param defaultFeatures Defines available features, sets the default state (enabled/disabled)
-## e.g:
-## defaultFeatures:
-##   cadvisor: true
-##   kube-state-metrics: true
-##   kubernetes-nodes: true
-defaultFeatures: {}
+features:
+  enabled: true
+  ## @param features.default Specify the feature default state (enabled/disabled)
+  ## e.g:
+  ##
+  ## default:
+  ##   cadvisor: true
+  ##   kube-state-metrics: true
+  ##   kubernetes-nodes: true
+  ##
+  default: {}
 ## @param rawList List of resources to render (value is rendered using tpl if type=template)
 ##
 ## e.g:
