@@ -35,11 +35,11 @@ helm install example oci://ghcr.io/bitdepscharts/raw --values config.yaml
 
 ### Resources and features
 
-| Name              | Description                                                                | Value  |
-| ----------------- | -------------------------------------------------------------------------- | ------ |
-| `enableFeatures`  | Enables/disables features default (defaultFeatures).                       | `true` |
-| `defaultFeatures` | Defines available features, sets the default state (enabled/disabled)      | `{}`   |
-| `rawList`         | List of resources to render (value is rendered using tpl if type=template) | `[]`   |
+| Name               | Description                                                                | Value  |
+| ------------------ | -------------------------------------------------------------------------- | ------ |
+| `features.enabled` | Specify whether to use the features.default state.                         | `true` |
+| `features.default` | Specify the feature default state (enabled/disabled)                       | `{}`   |
+| `rawList`          | List of resources to render (value is rendered using tpl if type=template) | `[]`   |
 
 ## Configuration Examples
 
@@ -66,22 +66,25 @@ rawList:
 The chart supports conditional rendering for a convenient way to enable/disable features. First, you may want to define defaults for the available features:
 
 ```yaml
-defaultFeatures:
-  cadvisor: true
-  kube-state-metrics: true
-  kubernetes-nodes: true
-  port-metrics: true
-  istio: true
+features:
+  enabled: true
+  default:
+    cadvisor: true
+    kube-state-metrics: true
+    kubernetes-nodes: true
+    port-metrics: true
+    istio: true
 ```
 
-When a condition such as `istio.enabled` is met, it matches this default state. To achieve conditional rendering, you can individually set the condition value into the desired state, as shown below:
+When a condition such as `istio.enabled` is met, it matches this default state if `features.enabled: true`. You can explicitly enable/disable features (as `hello.enabled: true`), this specification has the priority over `features.default`, see the example bellow:
 
 ```yaml
-defaultFeatures:
-  hello: true
+features:
+  default:
+    hello: false
 
 hello:
-  enabled: false
+  enabled: true
 
 rawList:
 - type: template
@@ -90,6 +93,8 @@ rawList:
   value:
     ...
 ```
+
+Note: use `features.enabled: false` to disable the default features state.
 
 ## Advanced usage
 
