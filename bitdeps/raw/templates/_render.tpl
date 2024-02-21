@@ -7,35 +7,22 @@
 */}}
 {{- define "raw.render" -}}
   {{- $rendered := list -}}
+  {{- $context := dict "Values" .values | merge (omit .context "Values") -}}
 
-  {{- with set .context "Values" .values -}}
-    {{- $context := . -}}
-    {{- range $.resources -}}
+  {{- range $.resources -}}
+    {{- if include "raw.feature.enabled" (dict "condition" .condition "context" $context) -}}
+      {{- $metadata := include "raw.metadata" (dict "name" .name "context" $context) | fromYaml -}}
+      {{- $value := include "common.tplvalues.render" (dict "value" .value "context" $context) | fromYaml -}}
 
-      {{- $type := .type | default "resource" -}}
-      {{- $defaultMetadata := include "raw.metadata" (dict "name" .name "context" $context) | fromYaml -}}
-
-      {{- if include "raw.feature.enabled" (dict "condition" .condition "context" $context) -}}
-
-        {{/* Parse resource metadata */}}
-        {{- $value := typeIs "string" .value | ternary .value (.value | toYaml) | fromYaml -}}
-        {{- $metadata := dict -}}
-        {{- with $value.metadata -}}
-          {{- $metadata = include "common.tplvalues.render" (dict "value" . "context" $context | fromYaml) -}}
-        {{- end -}}
-
-        {{/* Build up value's resulting metadata */}}
-        {{- $value = set $value "metadata" (merge $metadata $defaultMetadata) -}}
-        {{- if not $value.metadata.name -}}{{- "Raw resources must either have name or value.metadta.name set!" | fail -}}{{- end -}}
-
-        {{- if eq $type "resource" -}}
-          {{- $rendered = append $rendered ($value | toYaml) -}}
-        {{- else if eq $type "template" -}}
-          {{- $value := include "common.tplvalues.render" (dict "value" .value "context" $context) | fromYaml | merge $metadata  -}}
-          {{- $rendered = append $rendered ($value | toYaml) -}}
-        {{- end -}}
-
+      {{- if and $value.metadata (typeIs "string" $value.metadata) -}}
+        {{/* Fetch the resource metadata and merge with the automatic default */}}
+        {{- $metadata = include "common.tplvalues.render" (dict "value" $value.metadata "context" $context | fromYaml) | mergeOverwrite $metadata -}}
       {{- end -}}
+      {{- if not $metadata.name -}}{{- "Raw resources must either have name or value.metadta.name set!" | fail -}}{{- end -}}
+
+
+      {{- $value = set $value "metadata" $metadata -}}
+      {{- $rendered = append $rendered ($value | toYaml) -}}
     {{- end -}}
   {{- end -}}
 
@@ -58,8 +45,9 @@ Load resources and templates from chart files
     {{/* Load files specified by glob and split its contents by multipart separator --- */}}
     {{- range $path, $_ :=  $.context.Files.Glob $glob -}}
       {{- range $.context.Files.Get $path | splitList "---\n" -}}
-        {{- with . | fromYaml -}}
-          {{- $resources = append $resources . -}}
+        {{- with tpl . $.context | fromYaml -}}
+          {{- $raw := .raw | default dict -}}
+          {{- $resources = append $resources (dict "value" (omit . "raw") | merge $raw) -}}
         {{- end -}}
       {{- end -}}
     {{- end -}}
