@@ -30,7 +30,7 @@ true
     {{- with .context -}}
       {{- $featuresDefault := get .Values.features.default $feature._0 | default false -}}
       {{- $default := ternary $featuresDefault false .Values.features.enabled -}}
-      {{- $enabled := .Values | dig $feature._0 $feature._1 $default -}}
+      {{- $enabled := .Values | merge dict | dig $feature._0 $feature._1 $default -}}
 {{- ternary "true" "" $enabled -}}
     {{- end -}}
   {{- end }}
