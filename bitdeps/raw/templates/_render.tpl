@@ -16,7 +16,7 @@
 
       {{- if $value.metadata -}}
         {{/* Fetch the resource metadata and merge with the automatic default */}}
-        {{- $metadata = include "common.tplvalues.render" (dict "value" $value.metadata "context" $context | fromYaml) | mergeOverwrite $metadata -}}
+        {{- $metadata = include "common.tplvalues.render" (dict "value" $value.metadata "context" $context) | fromYaml | mergeOverwrite $metadata -}}
       {{- end -}}
       {{- if not $metadata.name -}}{{- "Raw resources must either have name or value.metadata.name set!" | fail -}}{{- end -}}
 
