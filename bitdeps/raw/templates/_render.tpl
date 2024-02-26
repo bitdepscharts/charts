@@ -14,12 +14,11 @@
       {{- $metadata := include "raw.metadata" (dict "name" .name "context" $context) | fromYaml -}}
       {{- $value := include "common.tplvalues.render" (dict "value" .value "context" $context) | fromYaml -}}
 
-      {{- if and $value.metadata (typeIs "string" $value.metadata) -}}
+      {{- if $value.metadata -}}
         {{/* Fetch the resource metadata and merge with the automatic default */}}
         {{- $metadata = include "common.tplvalues.render" (dict "value" $value.metadata "context" $context | fromYaml) | mergeOverwrite $metadata -}}
       {{- end -}}
-      {{- if not $metadata.name -}}{{- "Raw resources must either have name or value.metadta.name set!" | fail -}}{{- end -}}
-
+      {{- if not $metadata.name -}}{{- "Raw resources must either have name or value.metadata.name set!" | fail -}}{{- end -}}
 
       {{- $value = set $value "metadata" $metadata -}}
       {{- $rendered = append $rendered ($value | toYaml) -}}

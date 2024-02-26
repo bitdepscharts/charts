@@ -3,7 +3,7 @@ name: raw
 description: Raw resource/templates application Helm chart
 home: https://github.com/bitdepscharts/charts/tree/main/bitdeps/raw
 type: application
-version: 0.5.1
+version: 0.5.2
 sources:
   - https://github.com/bitdepscharts/charts
 keywords:
