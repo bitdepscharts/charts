@@ -5,8 +5,7 @@
 */}}
 
 {{- define "raw.chart.name" -}}
-  {{- $rawName := default "raw" .Values.chartName -}}
-  {{- ternary $rawName .Values.chartName .Chart.IsRoot -}}
+  {{- ternary .Values.chartName .Chart.Name .Chart.IsRoot -}}
 {{- end -}}
 
 {{/*
