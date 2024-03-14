@@ -6,7 +6,7 @@ Pull secrets for .imagePullSecrets
 */}}
 {{- define "raw.imagePullSecrets" -}}
 {{- $context := $ -}}
-{{- if .Values.imagePullSecrets -}}
+{{- with .Values.imagePullSecrets -}}
   {{- $injectGlobal := merge $.Values (dict "global" (dict "imagePullSecrets" .)) -}}
   {{- $_ := set $context "Values" $injectGlobal -}}
 {{- end -}}
