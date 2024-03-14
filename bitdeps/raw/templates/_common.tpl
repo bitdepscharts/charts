@@ -10,5 +10,5 @@ Pull secrets for .imagePullSecrets
   {{- $injectGlobal := merge $.Values (dict "global" (dict "imagePullSecrets" .)) -}}
   {{- $_ := set $context "Values" $injectGlobal -}}
 {{- end -}}
-{{- include "common.images.renderPullSecrets" (dict "context" merge $context) -}}
+{{- include "common.images.renderPullSecrets" (dict "context" $context) -}}
 {{- end -}}
