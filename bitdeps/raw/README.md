@@ -23,24 +23,24 @@ helm install example oci://ghcr.io/bitdepscharts/raw --values config.yaml
 
 ## Parameters
 
-### Raw App Chart Parameters
+### Raw App chart parameters
 
-| Name                | Description                                                                      | Value |
-| ------------------- | -------------------------------------------------------------------------------- | ----- |
-| `chartName`         | Defines the chart/application (helm.sh/chart and app.kubernetes.io/name)         | `raw` |
+| Name                | Description                                                                       | Value |
+| ------------------- | --------------------------------------------------------------------------------- | ----- |
+| `chartName`         | Defines the chart/application (helm.sh/chart and app.kubernetes.io/name)          | `raw` |
 | `nameOverride`      | String to partially override common.names.name (overrides app.kubernetes.io/name) | `""`  |
 | `fullnameOverride`  | String to fully override common.names.fullname                                    | `""`  |
 | `namespaceOverride` | String to fully override common.names.namespace                                   | `""`  |
-| `commonLabels`      | Labels to add to all deployed objects                                            | `{}`  |
-| `commonAnnotations` | Annotations to add to all deployed objects                                       | `{}`  |
+| `commonLabels`      | Labels to add to all deployed objects                                             | `{}`  |
+| `commonAnnotations` | Annotations to add to all deployed objects                                        | `{}`  |
 
-### Resources and Features
+### Resources and features
 
-| Name               | Description                                                                   | Value  |
-| ------------------ | ----------------------------------------------------------------------------- | ------ |
-| `features.enabled` | Specify whether to use the features.default state.                            | `true` |
-| `features.default` | Specify the feature default state (enabled/disabled)                          | `{}`   |
-| `rawList`          | List of resources to render                                                   | `[]`   |
+| Name               | Description                                                     | Value  |
+| ------------------ | --------------------------------------------------------------- | ------ |
+| `features.enabled` | Specify whether to use the features.default state.              | `true` |
+| `features.default` | Specify the feature default state (enabled/disabled)            | `{}`   |
+| `rawList`          | List of resources to render (value can be either map or string) | `[]`   |
 
 ## Configuration Examples
 
